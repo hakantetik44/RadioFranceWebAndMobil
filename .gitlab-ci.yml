@@ -1,0 +1,17 @@
+stages:
+  - verify
+
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+verify:
+  stage: verify
+  image: jelastic/maven:3.9.5-openjdk-21
+  script:
+    #- CHANGED_JAVA_FILES=$(git diff $CI_MERGE_REQUEST_DIFF_BASE_SHA --name-only | grep .java$ | sed 's/src\//**\//'| sed 's/.*/&,/' || true)
+    - mvn clean compile test-compile checkstyle:check -Dcheckstyle.includes="$CHANGED_JAVA_FILES" -s .gitlab/ci_settings.xml
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
