@@ -5,8 +5,11 @@ import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
 import org.junit.Assert;
 import pages.menu.AcceuilPage;
+import utils.ConfigReader;
 import utils.Driver;
 import utils.OS;
+
+import java.net.URL;
 
 public class AliExpressStepDefinitions {
 
@@ -50,5 +53,25 @@ public class AliExpressStepDefinitions {
                     Driver.getCurrentDriver().findElement(By.id("com.android.dialer:id/dialpad")).isDisplayed());
         }
     } */
+
+    }
+    @Given("The user verifies that user be on the AliExpress platform")
+    public void the_user_verifies_that_user_be_on_the_ali_express_platform() {
+        String actualUrl = Driver.getCurrentDriver().getCurrentUrl();
+        String expectedUrl = ConfigReader.getProperty("urlBelgium");
+        Assert.assertEquals(expectedUrl,actualUrl);
+    }
+    @Given("The user accepts to cookies")
+    public void the_user_accepts_to_cookies() {
+        acceuilPage.cookies.click();
+    }
+    @Given("The user clicks to allow")
+    public void the_user_clicks_to_allow() {
+        acceuilPage.allow.click();
+    }
+
+    @Given("The user clicks on Alle Rubrieken")
+    public void the_user_clicks_on() {
+        acceuilPage.alleRubrieken.click();
     }
 }
