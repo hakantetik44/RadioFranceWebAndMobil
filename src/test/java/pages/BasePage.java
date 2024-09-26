@@ -8,10 +8,14 @@ import io.appium.java_client.touch.offset.PointOption;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.RemoteWebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.Driver;
+
 import java.net.MalformedURLException;
 import java.time.Duration;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static io.appium.java_client.touch.WaitOptions.waitOptions;
@@ -19,16 +23,9 @@ import static io.appium.java_client.touch.offset.PointOption.point;
 import static utils.Driver.getCurrentDriver;
 import static utils.Driver.getWebDriver;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-
 
 public class BasePage {
-
+    WebDriver driver = Driver.getCurrentDriver();
     private static final Logger LOG = LoggerFactory.getLogger(BasePage.class);
 
     public static void scrollToTop(int x, int y) throws InterruptedException, MalformedURLException {
@@ -53,7 +50,6 @@ public class BasePage {
                 .perform();
 
     }
-
 
     private static int calculateOffsetForLeftScroll(int scrollAmount) throws MalformedURLException, InterruptedException {
         Dimension dimension = getCurrentDriver().manage().window().getSize();
@@ -147,14 +143,7 @@ public class BasePage {
                         "speed", 5000
                 ));
     }
-    public void wait(int seconds) {
-        try {
-            Thread.sleep(seconds * 1000);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            System.out.println("Bekleme sırasında bir hata oluştu: " + e.getMessage());
-        }
-    }
+
 
 
 
@@ -311,10 +300,46 @@ public class BasePage {
         getCurrentDriver().manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
     }
 
+    public void wait(int seconds) {
+        try {
+            Thread.sleep(seconds * 1000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            System.out.println("Bekleme sırasında bir hata oluştu: " + e.getMessage());
+        }
+    }
 
+   /* // Elementin tıklanabilir olmasını bekleyip tıklama işlemi
+    public void waitAndClick(WebElement element) {
+        try {
+            wait.until(ExpectedConditions.visibilityOf(element));
+            wait.until(ExpectedConditions.elementToBeClickable(element)).click();
+            System.out.println("Element başarıyla tıklandı: " + element);
+        } catch (Exception e) {
+            System.out.println("Element tıklanamadı: " + element + " Hata: " + e.getMessage());
+        }
+    }*/
 
+    // Yeni açılan pencereye geçiş işlemi
+    public void switchToNewWindow() {
+        String currentWindow = driver.getWindowHandle();
+        Set<String> allWindows = driver.getWindowHandles();
 
+        for (String window : allWindows) {
+            if (!window.equals(currentWindow)) {
+                driver.switchTo().window(window);
+                System.out.println("Yeni pencereye geçildi: " + window);
+                break;
+            }
+        }
+    }
 
+    // Orijinal pencereye geri dönme işlemi
+    public void switchBackToOriginalWindow() {
+        String originalWindow = driver.getWindowHandles().iterator().next();
+        driver.switchTo().window(originalWindow);
+        System.out.println("Orijinal pencereye geri dönüldü.");
+    }
 
 }
 
