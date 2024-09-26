@@ -45,14 +45,29 @@ public class AcceuilPage {
     public void clickCustomerServiceCallButton() {
         getCurrentDriver().findElement(getCustomerServiceCallButton()).click();
     }
+
     // kategoriler icin dinamik locate alma methodu
     public static WebElement getCategoryElement(String categoryName) {
         WebDriver driver = Driver.getCurrentDriver();
         String dynamicXpath = "//div[text()='" + categoryName + "']";
         return driver.findElement(By.xpath(dynamicXpath));
     }
+  
     // secilen kategorinin acilan sayfadaki sayfa basligi
     @FindBy(xpath = "//*[@class='component--lv3CategoryTitle--3NEC_gC']")
     public WebElement categoryPageTitle;
+
+     @FindBy(xpath = "//*[text()='Cookies accepteren']")
+         public WebElement cookies;
+
+    @FindBy(xpath = "//*[text()='Toestaan']")
+    public WebElement allow;
+
+    @FindBy(xpath="//div[text()='Alle Rubrieken']")
+       public WebElement alleRubrieken;
+
+    @FindBy(xpath="//*[text()='Dameskleding']")
+    public WebElement womenClothes;
+
 
 }

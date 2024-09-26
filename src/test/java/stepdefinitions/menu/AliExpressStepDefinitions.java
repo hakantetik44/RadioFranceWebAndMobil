@@ -14,6 +14,8 @@ import utils.Driver;
 import utils.OS;
 
 
+import java.net.URL;
+
 import java.time.Duration;
 import java.util.List;
 
@@ -68,6 +70,26 @@ public class AliExpressStepDefinitions {
                     Driver.getCurrentDriver().findElement(By.id("com.android.dialer:id/dialpad")).isDisplayed());
         }
     } */
+
+    }
+    @Given("The user verifies that user be on the AliExpress platform")
+    public void the_user_verifies_that_user_be_on_the_ali_express_platform() {
+        String actualUrl = Driver.getCurrentDriver().getCurrentUrl();
+        String expectedUrl = ConfigReader.getProperty("urlBelgium");
+        Assert.assertEquals(expectedUrl,actualUrl);
+    }
+    @Given("The user accepts to cookies")
+    public void the_user_accepts_to_cookies() {
+        acceuilPage.cookies.click();
+    }
+    @Given("The user clicks to allow")
+    public void the_user_clicks_to_allow() {
+        acceuilPage.allow.click();
+    }
+
+    @Given("The user clicks on Alle Rubrieken")
+    public void the_user_clicks_on() {
+        acceuilPage.alleRubrieken.click();
     }
     @Given("Je suis sur la page d'acceuil d'AliExpress")
     public void je_suis_sur_la_page_d_acceuil_d_ali_express() {
