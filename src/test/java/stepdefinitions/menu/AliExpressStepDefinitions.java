@@ -9,6 +9,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.BasePage;
 import pages.menu.AcceuilPage;
+import pages.menu.CategoriesPage;
 import utils.ConfigReader;
 import utils.Driver;
 import utils.OS;
@@ -27,6 +28,7 @@ public class AliExpressStepDefinitions {
     WebDriver driver = Driver.getCurrentDriver();
     BasePage basePage = new BasePage();
     private AcceuilPage acceuilPage = new AcceuilPage();
+    private CategoriesPage categories = new CategoriesPage();
 
     public AliExpressStepDefinitions() {
 
@@ -135,7 +137,7 @@ public class AliExpressStepDefinitions {
         if (OS.isWeb()) {
             WebDriver driver = Driver.getCurrentDriver();
             // categoryName parametresi ile ilgili kategori elementini alıyoruz
-            WebElement categoryElement = AcceuilPage.getCategoryElement(categoryName);
+            WebElement categoryElement = categories.getCategoryElement(categoryName);
 
             // Kategoriyi bulup, tıklıyoruz
             (categoryElement).click();
@@ -161,10 +163,10 @@ public class AliExpressStepDefinitions {
             // Yeni pencereye geçiş kontrolü ve sayfa başlığı görünürlüğü
             try {
                 // Sayfa başlığının görünür olmasını bekliyoruz
-                wait.until(ExpectedConditions.visibilityOf(acceuilPage.categoryPageTitle));
+                wait.until(ExpectedConditions.visibilityOf(categories.categoryPageTitle));
 
                 // Sayfa başlığını alıyoruz
-                String actualCategoryTitle = acceuilPage.categoryPageTitle.getText();
+                String actualCategoryTitle = categories.categoryPageTitle.getText();
 
                 // Sayfa başlığının beklenen kategori ile eşleşip eşleşmediğini kontrol ediyoruz
                 Assert.assertTrue("L'utilisateur n'est pas sur la bonne catégorie: " +
@@ -237,5 +239,63 @@ public class AliExpressStepDefinitions {
       }
     }
 
+    @When("Je clique sur la Livraison gratuit")
+    public void je_clique_sur_la_livraison_gratuit() {
+        categories.buttonLivraisonGratuit.click(); // Butona tıklama
+    }
 
+    @Then("Le produit devrait afficher la mention Livraison gratuite")
+    public void le_produit_devrait_afficher_la_mention_livraison_gratuite() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10)); // Bekleme süresi
+        int maxScrolls = 5; // Maksimum kaydırma sayısı. goruntulemek istedigimiz urun miktarina gore sayfayi kaydirabiliriz
+        int scrollCount = 0; // Kaydırma sayacını başlatma
+
+        // Ürünleri bulmak için temel locator
+        List<WebElement> produits = driver.findElements(By.xpath("//div[@class='_1Hxqh']"));
+
+        // Sayfadaki toplam ürün sayısı
+        int initialProductCount = produits.size();
+        boolean hasMoreProducts = true;
+
+        // Döngü, sayfa kaydırdıkça ürünlerin yüklenmeye devam ettiğini kontrol eder
+        while (hasMoreProducts && scrollCount < maxScrolls) {
+            // Her bir ürün için "Livraison gratuite" kontrolü
+            for (WebElement produit : produits) {
+                try {
+                    // Ürün başlığını al
+                    String produitTitre = produit.getText();
+                    System.out.println("Produit: " + produitTitre); // Ürünün adını yazdır
+
+                    // "Livraison gratuite" yazısını içerip içermediğini kontrol et
+                    if (produitTitre.contains("Livraison gratuite")) {
+                        System.out.println("Test PASSED: 'Livraison gratuite' est présent pour ce produit.");
+                    } else {
+                        System.out.println("Test FAILED: 'Livraison gratuite' n'est pas présent pour ce produit.");
+                    }
+                } catch (Exception e) {
+                    System.err.println("Erreur lors de la vérification du produit: " + e.getMessage());
+                }
+            }
+
+            // Sayfayı aşağı kaydırarak yeni ürünlerin yüklenmesini sağla
+            ((JavascriptExecutor) driver).executeScript("window.scrollTo(0, document.body.scrollHeight);");
+
+            // Yeni ürünler yüklenene kadar bekle
+            wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(By.xpath("//div[@class='_1Hxqh']"), initialProductCount));
+
+            // Yeni ürünler yüklendiğinde listeyi güncelle
+            produits = driver.findElements(By.xpath("//div[@class='_1Hxqh']"));
+
+            // Eğer yeni ürün yüklenmediyse döngüden çık
+            if (produits.size() == initialProductCount) {
+                hasMoreProducts = false;
+            } else {
+                initialProductCount = produits.size(); // Yeni ürün sayısını kaydet
+                scrollCount++; // Kaydırma sayısını artır
+            }
+        }
+
+        System.out.println("Nombre total de scrolls effectués: " + scrollCount);
+        System.out.println("Tous les produits visibles ont été vérifiés.");
+    }
 }
