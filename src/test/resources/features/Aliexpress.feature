@@ -1,5 +1,5 @@
 Feature: AliExpress Basic Operations
-@test
+  @test
   Scenario: Verify URL and Make a Phone Call
     Given I am on the AliExpress platform
     When Je vérifie que title est "AliExpress - le plus grand catalogue de choix d'achat en ligne pour l'électronique, mode, maison, déco, jouets, sport, auto... Attendez-vous à plus et faites des économies avec AliExpress. | AliExpress France"
