@@ -41,19 +41,29 @@ public class Driver {
     }
 
     public static WebDriver getWebDriver(String browser) {
+        WebDriver driver;
         switch (browser.toLowerCase()) {
             case "chrome":
                 ChromeDriver chromeDriver = new ChromeDriver();
                 ChromeOptions chromeOptions = new ChromeOptions();
                 chromeOptions.addArguments("--disable-search-engine-choice-screen");
-                return chromeDriver;
+                driver = chromeDriver;
+                break;
             case "firefox":
-                return new FirefoxDriver();
+                driver = new FirefoxDriver();
+                break;
             case "edge":
-                return new EdgeDriver();
+                driver = new EdgeDriver();
+                break;
             default:
                 throw new IllegalArgumentException("Unsupported browser: " + browser);
         }
+
+        // Tarayıcıyı maksimize et
+        driver.manage().window().maximize();
+
+        return driver;
+
     }
 
     /**
