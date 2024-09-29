@@ -1,15 +1,10 @@
 package stepdefinitions;
-
-import static utils.Driver.getCurrentDriver;
-
 import io.appium.java_client.android.AndroidDriver;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
 import io.cucumber.java.en.Given;
-
 import java.net.MalformedURLException;
-
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -75,6 +70,12 @@ public class Hooks {
         getCurrentDriver().quit(); */
         WebDriver driver = Driver.getCurrentDriver();
         if (driver != null) {
+            try {
+                // 5 saniye bekleme ekleniyor
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             if (OS.OS.equals("Android")) {
                 killApplication((AndroidDriver) driver);
             }
