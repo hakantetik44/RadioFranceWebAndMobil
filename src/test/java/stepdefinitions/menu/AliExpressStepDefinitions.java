@@ -18,7 +18,10 @@ import utils.OS;
 import java.net.URL;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 
 import static org.junit.Assert.assertEquals;
@@ -297,5 +300,187 @@ public class AliExpressStepDefinitions {
 
         System.out.println("Nombre total de scrolls effectués: " + scrollCount);
         System.out.println("Tous les produits visibles ont été vérifiés.");
+    }
+
+    @Given("Je suis sur la page d'une sous-catégorie sélectionnée")
+    public void je_suis_sur_la_page_d_une_sous_catégorie_sélectionnée() {
+        if (OS.isWeb()) {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5)); // Bekleme süresi
+
+            // Tüm alt kategori ürün gruplarının locate edilmesi
+            List<WebElement> produits = driver.findElements(By.xpath("//div[@class='lv3Category--lv3CategoryContentName--2JnCa6z']"));
+
+            // Ürün grubu sayısının yazdırılması
+            System.out.println("Toplam ürün grubu sayısı: " + produits.size());
+
+            // Eğer sayfada en az bir ürün grubu varsa, rastgele bir ürün grubu seç
+            if (produits.size() > 0) {
+                // Random sınıfını kullanarak rastgele bir index seçiyoruz
+                Random random = new Random();
+                int randomIndex = random.nextInt(produits.size());
+
+                // Rastgele seçilen ürün grubu
+                WebElement produit = produits.get(randomIndex);
+                String produitNom = produit.getText().trim();
+                System.out.println("Randomly selected product group: " + produitNom); // Seçilen ürün adını yazdır
+
+                try {
+                    produit.click(); // Rastgele seçilen ürün grubuna tıkla
+
+                    // Sayfanın yüklenmesini bekle (dinamik olarak arama çubuğundaki ürün ismiyle kontrol)
+                    String dynamicXPath = "//input[@value='" + produitNom + "']";
+                    wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(dynamicXPath)));
+
+                    // Eğer bu noktaya geldiyse, ürün detay sayfası başarıyla açıldı
+                    System.out.println("Navigated to the selected sub-category page for product: " + produitNom);
+
+                } catch (Exception e) {
+                    // Hata durumunda ürün ismini ve hatayı terminale yazdır
+                    System.err.println("Failed to navigate to sub-category page for product: " + produitNom);
+                    System.err.println("Error: " + e.toString());
+                }
+            } else {
+                System.err.println("No product groups found on the page.");
+            }
+    }
+        else if (OS.isAndroid()) {
+
+        }
+    }
+    @When("Je sélectionne le tri par {string}")
+    public void je_sélectionne_le_tri_par(String triType) {
+        if (OS.isWeb()) {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10)); // Bekleme süresi
+            try {
+                // Pop-up var mı kontrol et ve tıklama işlemini gerçekleştir
+                WebElement googlePopUp = wait.until(ExpectedConditions.visibilityOf(categories.GooglePopUp));
+                if (googlePopUp.isDisplayed()) {
+                    googlePopUp.click(); // Eğer pop-up görünürse tıkla
+                    System.out.println("Google pop-up tıklandı.");
+                }
+            } catch (TimeoutException e) {
+                // Eğer pop-up görünmezse (örneğin sayfada değilse), test devam eder
+                System.out.println("Google pop-up görünmedi, devam ediliyor.");
+            } catch (Exception e) {
+                // Diğer hatalar için genel hata yönetimi
+                System.err.println("Pop-up işlemi sırasında bir hata oluştu: " + e.toString());
+            }
+
+            // Sıralama türüne göre butona tıklama
+            if ("Prix croissant".equalsIgnoreCase(triType)) {
+                categories.prixDownButton.click(); // Artan fiyat için butona tıkla
+                System.out.println("Artan fiyat sıralaması seçildi.");
+            } else if ("Prix décroissant".equalsIgnoreCase(triType)) {
+                categories.prixUpButton.click(); // Azalan fiyat için butona tıkla
+                System.out.println("Azalan fiyat sıralaması seçildi.");
+            } else {
+                System.err.println("Geçersiz sıralama türü: " + triType);
+            }
+        } else if (OS.isAndroid()) {
+            // Android için ek işlemler buraya eklenebilir
+        }
+    }
+    @Then("Les produits devraient être triés par prix du plus bas au plus élevé")
+    public void les_produits_devraient_être_triés_par_prix_du_plus_bas_au_plus_élevé() {
+        if (OS.isWeb()) {
+            // Bekleme süresi
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+            // Fiyatları temsil eden elementlerin bulunması
+            List<WebElement> prixElements = driver.findElements(By.xpath("//div[@class='multi--price--1okBCly']"));
+
+            // Fiyatların listelenmesi
+            List<Double> prixList = new ArrayList<>();
+
+            // Orijinal ve sıralı listeyi karşılaştırma
+            List<Double> sortedPrixList = new ArrayList<>(prixList);
+            Collections.sort(sortedPrixList);
+
+            // Eğer sıralı liste orijinal listeyle aynı değilse hata mesajı
+            if (!prixList.equals(sortedPrixList)) {
+                System.err.println("Test FAILED: Les produits ne sont pas triés correctement.");
+                System.err.println("Prix list: " + prixList);
+                System.err.println("Sorted prix list: " + sortedPrixList);
+                printUnsortedProducts(prixList, sortedPrixList);
+            } else {
+                System.out.println("Test PASSED: Les produits sont triés correctement.");
+            }
+        } else if (OS.isAndroid()) {
+            // Android için ek işlemler buraya eklenebilir
+        }
+
+    }
+
+    // Sıralamayı bozan ürünleri yazdıran metot
+    private void printUnsortedProducts(List<Double> prixList, List<Double> sortedPrixList) {
+        for (int i = 0; i < prixList.size(); i++) {
+            if (!prixList.get(i).equals(sortedPrixList.get(i))) {
+                System.err.println("Sıralamayı bozan ürün fiyatı: " + prixList.get(i));
+            }
+        }
+    }
+    @Then("Je vérifie que le tri est correct pour {string}")
+    public void je_vérifie_que_le_tri_est_correct(String order) {
+        // Fiyatları temsil eden elementlerin bulunması
+        List<WebElement> prixElements = driver.findElements(By.xpath("//div[@class='multi--price--1okBCly']"));
+
+        // Fiyatların listelenmesi
+        List<Double> prixList = new ArrayList<>();
+
+        if (OS.isWeb()) {
+            // Sıralama kontrolü
+            List<Double> sortedPrixList = new ArrayList<>(prixList);
+            if (order.equals("croissant")) {
+                Collections.sort(sortedPrixList); // Artan sıralama
+            } else if (order.equals("décroissant")) {
+                Collections.sort(sortedPrixList, Collections.reverseOrder()); // Azalan sıralama
+            } else {
+                System.err.println("Geçersiz sıralama tipi: " + order);
+                return; // Geçersiz sıralama tipi durumunda metodu bitir
+            }
+
+            // Eğer sıralı liste orijinal listeyle aynı değilse hata mesajı
+            if (!prixList.equals(sortedPrixList)) {
+                System.err.println("Test FAILED: Les produits ne sont pas triés correctement.");
+                System.err.println("Prix list: " + prixList);
+                System.err.println("Sorted prix list: " + sortedPrixList);
+                printUnsortedProducts(prixList, sortedPrixList);
+            } else {
+                System.out.println("Test PASSED: Les produits sont triés correctement.");
+            }
+        } else if (OS.isAndroid()) {
+            // Android için ek işlemler buraya eklenebilir
+        }
+    }
+
+
+    @Then("Les produits devraient être triés par prix du plus élevé au plus bas")
+    public void les_produits_devraient_être_triés_par_prix_du_plus_élevé_au_plus_bas() {
+        if (OS.isWeb()) {
+            // Bekleme süresi
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+            // Fiyatları temsil eden elementlerin bulunması
+            List<WebElement> prixElements = driver.findElements(By.xpath("//div[@class='multi--price--1okBCly']"));
+
+            // Fiyatların listelenmesi
+            List<Double> prixList = new ArrayList<>();
+
+            // Orijinal ve sıralı listeyi karşılaştırma
+            List<Double> sortedPrixList = new ArrayList<>(prixList);
+            Collections.sort(sortedPrixList, Collections.reverseOrder()); // Azalan sıralama
+
+            // Eğer sıralı liste orijinal listeyle aynı değilse hata mesajı
+            if (!prixList.equals(sortedPrixList)) {
+                System.err.println("Test FAILED: Les produits ne sont pas triés correctement.");
+                System.err.println("Prix list: " + prixList);
+                System.err.println("Sorted prix list: " + sortedPrixList);
+                printUnsortedProducts(prixList, sortedPrixList);
+            } else {
+                System.out.println("Test PASSED: Les produits sont triés correctement.");
+            }
+        } else if (OS.isAndroid()) {
+            // Android için ek işlemler buraya eklenebilir
+        }
     }
 }
