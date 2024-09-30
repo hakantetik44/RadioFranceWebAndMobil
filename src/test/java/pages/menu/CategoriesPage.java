@@ -30,4 +30,14 @@ public class CategoriesPage {
     @FindBy(xpath = "//div[text()='Livraison gratuite']")
     public WebElement buttonLivraisonGratuit;
 
+    @FindBy(xpath = "//*[@*='comet-icon comet-icon-arrowtriangledown topRefine2023--iconAsc--Q3bAVQK']")
+    public WebElement prixDownButton;
+
+    @FindBy(xpath = "//*[@*='comet-icon comet-icon-arrowtriangleup topRefine2023--active--moBCIXk topRefine2023--iconDesc--2v_ixsT']")
+    public WebElement prixUpButton;
+
+    @FindBy(xpath = "//*[@class='Bz112c Bz112c-r9oPif']")
+    public WebElement GooglePopUp; //  //*[@class='Bz112c Bz112c-r9oPif']
+
+
 }
