@@ -26,7 +26,7 @@ public class CategoriesPage {
     @FindBy(xpath = "//*[@class='component--lv3CategoryTitle--3NEC_gC']")
     public WebElement categoryPageTitle;
 
-    //
+    // secilen kategoriye ait urunlerin oldugu sayfadaki livraison gratuit butonu
     @FindBy(xpath = "//div[text()='Livraison gratuite']")
     public WebElement buttonLivraisonGratuit;
 
@@ -37,7 +37,11 @@ public class CategoriesPage {
     public WebElement prixUpButton;
 
     @FindBy(xpath = "//*[@class='Bz112c Bz112c-r9oPif']")
-    public WebElement GooglePopUp; //  //*[@class='Bz112c Bz112c-r9oPif']
+    public WebElement GooglePopUp;
 
+    @FindBy(xpath = "//*[@name='minPrice']")
+    public WebElement minPrice;
 
+    @FindBy(xpath = "//*[@name='maxPrice']")
+    public WebElement maxPrice;
 }
