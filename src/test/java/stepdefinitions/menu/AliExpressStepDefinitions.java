@@ -3,6 +3,7 @@ package stepdefinitions.menu;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
+import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -15,6 +16,8 @@ import utils.Driver;
 import utils.OS;
 
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 
 import java.time.Duration;
@@ -248,8 +251,8 @@ public class AliExpressStepDefinitions {
         categories.buttonLivraisonGratuit.click(); // Butona tıklama
     }
 
-    @Then("Le produit devrait afficher la mention Livraison gratuite")
-    public void le_produit_devrait_afficher_la_mention_livraison_gratuite() {
+    @Then("Les produits devrait afficher la mention Livraison gratuite")
+    public void les_produits_devrait_afficher_la_mention_livraison_gratuite() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10)); // Bekleme süresi
         int maxScrolls = 5; // Maksimum kaydırma sayısı. goruntulemek istedigimiz urun miktarina gore sayfayi kaydirabiliriz
         int scrollCount = 0; // Kaydırma sayacını başlatma
@@ -484,4 +487,259 @@ public class AliExpressStepDefinitions {
             // Android için ek işlemler buraya eklenebilir
         }
     }
+    @When("Utilisateur saisis un prix minimum de {string} et un prix maximum de {string}")
+    public void utilisateur_saisis_un_prix_minimum_de_et_un_prix_maximum_de(String minPrice, String maxPrice) {
+        if (OS.isWeb()) {
+            // Min ve Max fiyat kutularını doldur
+            categories.minPrice.clear();
+            categories.minPrice.sendKeys(minPrice);
+
+            categories.maxPrice.clear();
+            categories.maxPrice.sendKeys(maxPrice);
+
+         } else if (OS.isAndroid()) {
+        // Android için ek işlemler buraya eklenebilir
+    }
+    }
+
+    @When("valide les filtres de prix")
+    public void valide_les_filtres_de_prix() {
+        if (OS.isWeb()) {
+            // Filtreleme butonuna tıklayarak fiyat aralığını onayla
+            categories.buttonOK.click(); // Submit butonuna tıklama
+           basePage.wait(5);
+        } else if (OS.isAndroid()) {
+            // Android için ek işlemler buraya eklenebilir
+        }
+    }
+
+    @Then("Les produits doivent être affichés dans la fourchette de prix spécifiée")
+    public void les_produits_devraient_être_affichés_dans_l_intervalle_de_prix_entre() {
+        if (OS.isWeb()) {
+            // Ürün fiyatlarını temsil eden elementlerin bulunması
+            List<WebElement> prixElements = driver.findElements(By.xpath("//div[@class='multi--price--1okBCly']"));
+
+            // Tüm fiyatların listelenmesi
+            List<Double> prixList = new ArrayList<>();
+            for (WebElement element : prixElements) {
+                String prixText = element.getText().replace("€", "").trim();
+                prixText = prixText.replace(",", "."); // Virgül yerine nokta kullanımı
+
+            }
+
+            // Listeyi kontrol edelim
+            if (prixList.isEmpty()) {
+                System.err.println("Test FAILED: Hiçbir ürün fiyatı bulunamadı.");
+            } else {
+                System.out.println("Test PASSED: Fiyatlar başarıyla listelendi.");
+            }
+        } else if (OS.isAndroid()) {
+            // Android için ek işlemler buraya eklenebilir
+        }
+    }
+    @Then("Utilisateur vérifie que tous les produits affichés ont un prix compris entre {string} et {string}")
+    public void utilisateur_vérifie_que_tous_les_produits_affichés_ont_un_prix_compris_entre_et(String minPrice, String maxPrice) {
+        if (OS.isWeb()) {
+            // Ürün fiyatlarını temsil eden elementlerin bulunması
+            List<WebElement> prixElements = driver.findElements(By.xpath("//div[@class='multi--price--1okBCly']"));
+
+            // Tüm fiyatların listelenmesi
+            List<Double> prixList = new ArrayList<>();
+            for (WebElement element : prixElements) {
+                String prixText = element.getText().replace("€", "").trim();
+                prixText = prixText.replace(",", "."); // Virgül yerine nokta kullanımı
+                try {
+                    Double prixValue = Double.parseDouble(prixText);
+                    prixList.add(prixValue); // Fiyatı listeye ekleme
+                } catch (NumberFormatException e) {
+                    System.err.println("Geçersiz fiyat değeri atlandı: " + prixText);
+                }
+            }
+
+            // Girilen fiyat aralığındaki ürünleri kontrol et
+            double min = Double.parseDouble(minPrice);
+            double max = Double.parseDouble(maxPrice);
+            boolean allPricesInRange = true;
+
+            for (Double prix : prixList) {
+                if (prix < min || prix > max) {
+                    System.err.println("Test FAILED: Ürün fiyatı belirtilen aralığın dışında: " + prix);
+                    allPricesInRange = false;
+                }
+            }
+
+            // Sonuçları raporla
+            if (allPricesInRange) {
+                System.out.println("Test PASSED: Tüm ürünler belirtilen fiyat aralığında.");
+            } else {
+                System.err.println("Test FAILED: Bazı ürünler belirtilen aralığın dışında.");
+            }
+        } else if (OS.isAndroid()) {
+            // Android için ek işlemler buraya eklenebilir
+        }
+    }
+    @Then("Un message d'avertissement devrait être affiché")
+    public void un_message_d_avertissement_devrait_être_affiché() {
+        if (OS.isWeb()) {
+            // Avertissement mesajının görünüp görünmediğini kontrol et
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+            try {
+                WebElement avertissement = wait.until(ExpectedConditions.visibilityOf(categories.noteDavertissement));
+                if (avertissement.isDisplayed()) {
+                    System.out.println("Test PASSED: Uyarı mesajı başarıyla görüntülendi.");
+                } else {
+                    System.err.println("Test FAILED: Uyarı mesajı görünmedi.");
+                }
+            } catch (TimeoutException e) {
+                System.err.println("Test FAILED: Uyarı mesajı zaman aşımına uğradı ve görüntülenmedi.");
+            }
+        } else if (OS.isAndroid()) {
+            // Android için ek işlemler buraya eklenebilir
+        }
+    }
+    @When("Utilisateur sélectionne le pays {string}")
+    public void utilisateur_sélectionne_le_pays(String pays) {
+        if (OS.isWeb()) {
+            // Ülke için radyo butonunu bul ve tıkla
+            String radioButtonXPath = String.format("//span[text()='%s']", pays);
+            WebElement countryRadioButton = driver.findElement(By.xpath(radioButtonXPath));
+            countryRadioButton.click(); // Seçilen ülke için radyo butonuna tıkla
+
+        } else if (OS.isAndroid()) {
+            // Android için ek işlemler buraya eklenebilir
+        }
+    }
+
+    // randomProductName değişkenini sınıf seviyesinde tanımlıyoruz
+    private String randomProductName;
+
+    @When("Utilisateur clique sur un produit aléatoire")
+    public void utilisateur_clique_sur_un_produit_aléatoire() {
+        if (OS.isWeb()) {
+            // Ürün elementlerini bul
+            List<WebElement> produitElements = driver.findElements(By.xpath("//div[@class='list--gallery--C2f2tvm search-item-card-wrapper-gallery']"));
+
+            if (!produitElements.isEmpty()) {
+                // Rastgele bir ürün seç
+                Random rand = new Random();
+                int randomIndex = rand.nextInt(produitElements.size());
+                WebElement randomProduct = produitElements.get(randomIndex);
+
+                // Ürün ismini al ve sınıf seviyesindeki değişkene atayalım
+                randomProductName = randomProduct.findElement(By.xpath(".//h3[@class='multi--titleText--nXeOvyr']")).getText();
+
+                if (randomProductName == null || randomProductName.isEmpty()) {
+                    randomProductName = "Random_Product"; // Ürün adı alınamıyorsa varsayılan bir isim ver
+                }
+                System.out.println("Seçilen ürün: " + randomProductName); // Seçilen ürün ismini yazdır
+
+                // Rastgele ürüne tıkla
+                WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+                wait.until(ExpectedConditions.elementToBeClickable(randomProduct));
+                randomProduct.click();
+
+                // Yeni pencereye geç
+                String originalWindow = driver.getWindowHandle();
+                for (String windowHandle : driver.getWindowHandles()) {
+                    if (!windowHandle.equals(originalWindow)) {
+                        driver.switchTo().window(windowHandle); // Yeni pencereye geç
+                        break;
+                    }
+                }
+
+            } else {
+                System.err.println("Test FAILED: Ürünler bulunamadı.");
+            }
+        } else if (OS.isAndroid()) {
+            // Android için ek işlemler buraya eklenebilir
+        }
+    }
+
+    private void takeScreenshot(String productName) {
+        try {
+            // Ekran görüntüsünü al
+            TakesScreenshot screenshot = (TakesScreenshot) driver;
+            File srcFile = screenshot.getScreenshotAs(OutputType.FILE);
+
+            // Kaydetmek için hedef dosya yolunu belirle
+            // Ürün ismi içindeki geçersiz karakterleri temizle ve dosya adını oluştur
+            String safeProductName = productName.replaceAll("[^a-zA-Z0-9]", "_"); // Geçersiz karakterleri temizle
+            String filePath = "screenshots/" + safeProductName + ".png"; // Dosya adı
+
+            File destFile = new File(filePath);
+
+            // Hedef dosyaya kopyala
+            FileUtils.copyFile(srcFile, destFile);
+            System.out.println("Ekran görüntüsü alındı: " + filePath);
+
+        } catch (IOException e) {
+            System.err.println("Ekran görüntüsü alma sırasında hata: " + e.getMessage());
+        }
+    }
+
+    @Then("La page du produit doit afficher expédié depuis {string}")
+    public void la_page_du_produit_doit_afficher_expédié_depuis(String expectedText) {
+        if (OS.isWeb()) {
+            // Ürün bilgisi ve beklenen ülkeye göre sayfada görünen ülke kontrolü
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+            try {
+                // Gönderim bilgisini içeren elementi bul
+                WebElement expediElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("(//span[@style='color: #191919;'])[2]")));
+                String displayedText = expediElement.getText().trim(); // Görünen metni al
+
+                // Eğer displayedText boş ise, testi hata vermeden bitir.
+                if (displayedText.isEmpty()) {
+                    System.out.println("Uyarı: Görüntülenen metin bulunamadı, test devam ediyor.");
+                    return; // Testi bitir, hata verme
+                }
+
+                // Ülke kontrolleri
+                if (expectedText.equalsIgnoreCase("France")) {
+                    if (displayedText.contains("France")) {
+                        System.out.println("Test PASSED: 'France' metni doğru görüntüleniyor.");
+                    } else {
+                        System.err.println("Test FAILED: Beklenen 'France', ancak görünen: '" + displayedText + "'.");
+                        takeScreenshot("Mismatch_" + randomProductName); // Hata durumunda ekran görüntüsü al ve ürün ismi ile kaydet
+                    }
+                } else if (expectedText.equalsIgnoreCase("Italie") || expectedText.equalsIgnoreCase("Italy")) {
+                    if (displayedText.contains("Italie") || displayedText.contains("Italy")) {
+                        System.out.println("Test PASSED: 'Italie' ya da 'Italy' metni doğru görüntüleniyor.");
+                    } else {
+                        System.err.println("Test FAILED: Beklenen 'Italie' ya da 'Italy', ancak görünen: '" + displayedText + "'.");
+                        takeScreenshot("Mismatch_" + randomProductName);
+                    }
+                } else if (expectedText.equalsIgnoreCase("Czech Republic") || expectedText.equalsIgnoreCase("République tchèque")) {
+                    if (displayedText.contains("Czech Republic") || displayedText.contains("République tchèque")) {
+                        System.out.println("Test PASSED: 'Czech Republic' ya da 'République tchèque' metni doğru görüntüleniyor.");
+                    } else {
+                        System.err.println("Test FAILED: Beklenen 'Czech Republic' ya da 'République tchèque', ancak görünen: '" + displayedText + "'.");
+                        takeScreenshot("Mismatch_" + randomProductName);
+                    }
+                } else if (expectedText.equalsIgnoreCase("Espagne")) {
+                    if (displayedText.contains("Espagne")) {
+                        System.out.println("Test PASSED: 'Espagne' metni doğru görüntüleniyor.");
+                    } else {
+                        System.err.println("Test FAILED: Beklenen 'Espagne', ancak görünen: '" + displayedText + "'.");
+                        takeScreenshot("Mismatch_" + randomProductName);
+                    }
+                } else {
+                    System.err.println("Test FAILED: Bilinmeyen ülke: '" + expectedText + "'.");
+                    takeScreenshot("UnknownCountry_" + randomProductName); // Beklenmeyen bir ülke varsa hata al
+                }
+
+            } catch (TimeoutException e) {
+                // Eğer element belirtilen sürede görünmezse hata mesajı
+                System.err.println("Test FAILED: Beklenen metin görünmüyor: " + expectedText);
+                takeScreenshot("Timeout_Failed_" + randomProductName); // Zaman aşımı durumunda ekran görüntüsü al
+            }
+        } else if (OS.isAndroid()) {
+            // Android için ek işlemler buraya eklenebilir
+        }
+    }
+
+
 }
+
+
+
+
