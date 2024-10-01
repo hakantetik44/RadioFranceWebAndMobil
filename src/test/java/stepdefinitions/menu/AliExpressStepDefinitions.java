@@ -37,8 +37,8 @@ public class AliExpressStepDefinitions {
 
     }
 
-    @Given("I am on the AliExpress platform")
-    public void iAmOnTheAliExpressPlatform() {
+    @Given("Utilisateur vérifie que l'URL est correcte")
+    public void utilisateur_vérifie_que_lURL_est_correctes() {
         if (OS.isWeb()) {
             String actualResult = Driver.getCurrentDriver().getCurrentUrl();
             assertEquals("https://fr.aliexpress.com/?gatewayAdapt=glo2fra", actualResult);
@@ -53,8 +53,8 @@ public class AliExpressStepDefinitions {
         assertEquals(title, actualResult);
     }
 
-    @Then("Je devrais voir la page d'accueil d'AliExpress")
-    public void jeDevraisVoirLaPageDAccueilDAliExpress() {
+    @Then("Utilisateur est sur la page d'accueil d'AliExpress")
+    public void utilisateur_est_sur_la_page_daccueil_dAliExpress() {
         assertTrue("Le logo AliExpress n'est pas affiché", acceuilPage.isLogoDisplayed());
     }
 
@@ -123,8 +123,8 @@ public class AliExpressStepDefinitions {
         assertTrue("URL doğrulanamadı: Beklenen -> " + expectedDomain + ", Gerçek -> " + actualUrl,
                 actualUrl.contains(expectedDomain));
     }
-    @Then("Je suis sur la Toutes les Categories")
-    public void je_suis_sur_la_toutes_les_categories() {
+    @Then("Utilisateur est sur la page Toutes les Catégories")
+    public void utilisateur_est_sur_la_page_Toutes_les_Catégories() {
         if (OS.isWeb()) {
         WebDriver driver = Driver.getCurrentDriver();
         WebElement categoryButton = driver.findElement(By.xpath("//*[@*='Categoey--categoryTitle--_3bKGRN']"));
@@ -135,8 +135,8 @@ public class AliExpressStepDefinitions {
         }
 
     }
-    @When("Je clique sur la categorie {string}")
-    public void je_clique_sur_la_categorie(String categoryName) {
+    @When("Utilisateur clique sur la catégorie {string}")
+    public void utilisateur_clique_sur_la_catégorie(String categoryName) {
         if (OS.isWeb()) {
             WebDriver driver = Driver.getCurrentDriver();
             // categoryName parametresi ile ilgili kategori elementini alıyoruz
@@ -150,8 +150,8 @@ public class AliExpressStepDefinitions {
 
         }
     }
-    @Then("Je devrais être redirigé vers la page de la catégorie {string}")
-    public void je_devrais_être_redirigé_vers_la_page_de_la_catégorie(String expectedCategory) {
+    @Then("Utilisateur devrait être redirigé vers la page de la catégorie {string}")
+    public void utilisateur_devrait_être_redirigé_vers_la_page_de_la_catégorie(String expectedCategory) {
         if (OS.isWeb()) {
             WebDriver driver = Driver.getCurrentDriver();
 
@@ -193,8 +193,8 @@ public class AliExpressStepDefinitions {
 
         }
     }
-  @When("Je clique sur chaque groupe de produits et la page s'ouvre")
-    public void je_clique_sur_chaque_groupe_de_produits_et_la_page_souvre(){
+    @When("Utilisateur clique sur chaque groupe de produits et la page s'ouvre")
+    public void utilisateur_clique_sur_chaque_groupe_de_produits_et_la_page_s_ouvre() {
       if (OS.isWeb()) {
           WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20)); // Bekleme süresi
 
@@ -242,8 +242,9 @@ public class AliExpressStepDefinitions {
       }
     }
 
-    @When("Je clique sur la Livraison gratuit")
-    public void je_clique_sur_la_livraison_gratuit() {
+    @When("Utilisateur clique sur la Livraison gratuite")
+    public void utilisateur_clique_sur_la_livraison_gratuite() {
+
         categories.buttonLivraisonGratuit.click(); // Butona tıklama
     }
 
@@ -302,8 +303,8 @@ public class AliExpressStepDefinitions {
         System.out.println("Tous les produits visibles ont été vérifiés.");
     }
 
-    @Given("Je suis sur la page d'une sous-catégorie sélectionnée")
-    public void je_suis_sur_la_page_d_une_sous_catégorie_sélectionnée() {
+    @Given("Utilisateur est sur la page d'une sous-catégorie sélectionnée")
+    public void utilisateur_est_sur_la_page_d_une_sous_catégorie_sélectionnée() {
         if (OS.isWeb()) {
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5)); // Bekleme süresi
 
@@ -347,8 +348,8 @@ public class AliExpressStepDefinitions {
 
         }
     }
-    @When("Je sélectionne le tri par {string}")
-    public void je_sélectionne_le_tri_par(String triType) {
+    @When("Utilisateur sélectionne le tri par {string}")
+    public void utilisateur_sélectionne_le_tri_par(String triType) {
         if (OS.isWeb()) {
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10)); // Bekleme süresi
             try {
@@ -419,8 +420,8 @@ public class AliExpressStepDefinitions {
             }
         }
     }
-    @Then("Je vérifie que le tri est correct pour {string}")
-    public void je_vérifie_que_le_tri_est_correct(String order) {
+    @Then("Utilisateur vérifie que le tri est correct pour {string}")
+    public void utilisateur_vérifie_que_le_tri_est_correct_pour(String  order) {
         // Fiyatları temsil eden elementlerin bulunması
         List<WebElement> prixElements = driver.findElements(By.xpath("//div[@class='multi--price--1okBCly']"));
 
