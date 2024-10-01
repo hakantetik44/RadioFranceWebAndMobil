@@ -44,4 +44,13 @@ public class CategoriesPage {
 
     @FindBy(xpath = "//*[@name='maxPrice']")
     public WebElement maxPrice;
+
+    @FindBy(xpath = "//*[@class='price--ok--30GSiFy']")
+    public WebElement buttonOK;
+
+    @FindBy(xpath = "//div[text()='Veuillez entrer des chiffres valides dans la plage de prix']")
+    public WebElement noteDavertissement;
+
+    @FindBy(xpath = "//*[@id='canvas']")
+    public WebElement chercheImageFermee;
 }

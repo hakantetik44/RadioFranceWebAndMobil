@@ -5,7 +5,7 @@ Feature: Categorie d'Électroménager
     Given Utilisateur est sur la page d'accueil d'AliExpress
     Then Utilisateur vérifie que l'URL est correcte
     Then Utilisateur est sur la page Toutes les Catégories
-    When Utilisateur clique sur la catégorie "Maison, jardin"
+    When Utilisateur clique sur la catégorie "Électroménager"
 
   Scenario: Aller à la catégorie d'Électroménager
     Then Utilisateur devrait être redirigé vers la page de la catégorie "Électroménager"
@@ -15,8 +15,8 @@ Feature: Categorie d'Électroménager
 
   Scenario: Vérifier la présence de la livraison gratuite pour les produits
     When Utilisateur clique sur la Livraison gratuite
-    Then Le produit devrait afficher la mention Livraison gratuite
-  @web
+    Then Les produits devrait afficher la mention Livraison gratuite
+
   Scenario: Utilisateur trie les produits de la sous-catégorie par prix croissant et décroissant
     Given Utilisateur est sur la page d'une sous-catégorie sélectionnée
     When Utilisateur sélectionne le tri par "Prix croissant"
@@ -26,4 +26,23 @@ Feature: Categorie d'Électroménager
     Then Les produits devraient être triés par prix du plus élevé au plus bas
     And Utilisateur vérifie que le tri est correct pour "décroissant"
 
- Scenario:
+  Scenario: Filtrer les produits par prix en utilisant les champs min et max
+    Given Utilisateur est sur la page d'une sous-catégorie sélectionnée
+    When Utilisateur saisis un prix minimum de "50" et un prix maximum de "100"
+    And  valide les filtres de prix
+    Then Les produits doivent être affichés dans la fourchette de prix spécifiée
+    And Utilisateur vérifie que tous les produits affichés ont un prix compris entre "50" et "100"
+
+
+  Scenario: Affichage d'un avertissement lorsque des caractères non numériques sont saisis dans les champs min et max
+    Given Utilisateur est sur la page d'une sous-catégorie sélectionnée
+    When Utilisateur saisis un prix minimum de "abc" et un prix maximum de "xyz"
+    And  valide les filtres de prix
+    Then Un message d'avertissement devrait être affiché
+
+  @web
+  Scenario: Sélectionner un pays et vérifier l'affichage du produit
+    Given Utilisateur est sur la page d'une sous-catégorie sélectionnée
+    When Utilisateur sélectionne le pays "France"
+    And Utilisateur clique sur un produit aléatoire
+    Then La page du produit doit afficher expédié depuis "France"
