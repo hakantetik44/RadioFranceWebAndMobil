@@ -1,11 +1,13 @@
 package stepdefinitions.menu;
 
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.openqa.selenium.*;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.BasePage;
@@ -20,11 +22,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
+import java.text.SimpleDateFormat;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 
 import static org.junit.Assert.assertEquals;
@@ -663,8 +663,12 @@ public class AliExpressStepDefinitions {
 
             // Kaydetmek için hedef dosya yolunu belirle
             // Ürün ismi içindeki geçersiz karakterleri temizle ve dosya adını oluştur
-            String safeProductName = productName.replaceAll("[^a-zA-Z0-9]", "_"); // Geçersiz karakterleri temizle
-            String filePath = "screenshots/" + safeProductName + ".png"; // Dosya adı
+            String safeProductName = productName.replaceAll("[^a-zA-Z0-9\\s]", "_"); // Geçersiz karakterleri temizle
+            safeProductName = safeProductName.replaceAll("\\s+", "_"); // Boşlukları alt çizgi ile değiştir
+
+            // Zaman damgası ekle (isteğe bağlı)
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            String filePath = "screenshots/" + safeProductName + "_" + timeStamp + ".png"; // Dosya adı
 
             File destFile = new File(filePath);
 
@@ -737,6 +741,167 @@ public class AliExpressStepDefinitions {
         }
     }
 
+    // When: Kullanıcı "Commandes" sıralama butonuna tıklar
+    @When("Utilisateur clique sur la Commandes")
+    public void utilisateur_clique_sur_la_Commandes() {
+        if (OS.isWeb()) {
+            // Web platformu için "Commandes" butonuna tıkla
+            WebElement commandesButton = categories.commandesButton;
+
+            // WebDriverWait ile butonun tıklanabilir hale gelmesini bekle
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+            wait.until(ExpectedConditions.elementToBeClickable(commandesButton));
+
+            commandesButton.click();
+        } else if (OS.isAndroid()) {
+            // Android platformu için eklemeler yapılabilir
+        }
+    }
+
+    // Then: Ürünler en çok satılandan en az satılana doğru sıralanmalı
+    @Then("Les produits devrait afficher de plus vendus à moins vendus")
+    public void les_produits_devrait_afficher_de_plus_vendus_à_moins_vendus() {
+        if (OS.isWeb()) {
+            // Web platformu için ürünlerin satış sayısını kontrol et
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+            // Ürünlerin yüklendiğinden emin olmak için bekle
+            List<WebElement> produits = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//*[@*='multi--trade--Ktbl2jB']")));
+
+            meilleurVente(produits);
+        } else if (OS.isAndroid()) {
+            // Android platformu için eklemeler yapılabilir
+        }
+    }
+
+    // Ortak kontrol fonksiyonu (Hem web hem de Android için kullanılır)
+    private void meilleurVente(List<WebElement> produits) {
+        List<Integer> salesNumbers = new ArrayList<>();
+
+        for (WebElement produit : produits) {
+            try {
+                // Ürünlerin satış sayısını al ve rakamları ayıkla
+                String salesText = produit.getText().replaceAll("[^0-9]", ""); // Sadece rakamları al
+
+                if (!salesText.isEmpty()) {
+                    int sales = Integer.parseInt(salesText); // Rakamları tam sayıya çevir
+                    salesNumbers.add(sales);
+                } else {
+                    System.out.println("Warning: Sales text is empty for one of the products.");
+                }
+            } catch (NumberFormatException e) {
+                System.err.println("Error: Couldn't parse sales number for product: " + produit.getText());
+            }
+        }
+
+        // Satış sayılarını kontrol et: en çok satılandan en az satılana doğru sıralanmış mı?
+        boolean sorted = true;
+        for (int i = 0; i < salesNumbers.size() - 1; i++) {
+            if (salesNumbers.get(i) < salesNumbers.get(i + 1)) {
+                sorted = false;
+                break;
+            }
+        }
+
+        // Test sonucunu bildir
+        if (sorted) {
+            System.out.println("Test PASSED: Les produits sont bien classés du plus vendu au moins vendu.");
+        } else {
+            System.err.println("Test FAILED: Les produits ne sont pas dans le bon ordre.");
+            takeScreenshot("Order_Mismatch"); // Hata durumunda ekran görüntüsü al
+        }
+    }
+
+    @When("Utilisateur clique sur la Promo")
+    public void utilisateur_clique_sur_la_Promo() {
+        if (OS.isWeb()) {
+            // Web platformu için promo checkbox'ına tıkla
+            categories.promoCheckbox.click();
+
+
+            // Promo checkbox'ına tıklandıktan sonra sayfanın güncellenmesini bekleyelim
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+            wait.until(ExpectedConditions.visibilityOf(categories.promoReductions));
+        } else if (OS.isAndroid()) {
+            // Android platformu için promo checkbox'ına tıklama işlemi buraya eklenebilir
+        }
+    }
+    @Then("Réductions Promo affiche")
+    public void reductions_Promo_affiche() {
+        if (OS.isWeb()) {
+            // Web platformu için Promo Reductions yazısının görünürlüğünü kontrol et
+
+            if (categories.promoReductions.isDisplayed()) {
+                System.out.println("Test PASSED: Promo Reductions yazısı başarıyla görüntüleniyor.");
+            } else {
+                System.err.println("Test FAILED: Promo Reductions yazısı görüntülenmiyor.");
+                takeScreenshot("PromoReductions_NotDisplayed");
+            }
+        } else if (OS.isAndroid()) {
+            // Android platformu için Promo Reductions yazısının görünürlüğü kontrol edilebilir
+        }
+    }
+    @And("Chaque produit devrait afficher au moins une étiquette 'Promo' ou 'Offre de bienvenue' ou 'Choice'")
+    public void chaque_produit_devrait_afficher_au_moins_une_étiquette_promo_ou_offre_de_bienvenue_ou_choice() {
+        if (OS.isWeb()) {
+            // Web platformu için ürünlerin etiketlerini kontrol et
+            List<WebElement> products = driver.findElements(By.xpath("//div[contains(@class, 'product-card')]")); // Ürün kartlarının genel locator'ı
+            boolean allProductsHaveLabel = true;
+
+            for (WebElement product : products) {
+                // Her ürün için etiket kontrolü
+                boolean hasPromoLabel = !product.findElements(By.xpath(".//img[@width='41.5']")).isEmpty(); // Promo etiketi
+                boolean hasWelcomeOfferLabel = !product.findElements(By.xpath(".//img[@width='84.5']")).isEmpty(); // Offre de bienvenue etiketi
+                boolean hasChoiceLabel = !product.findElements(By.xpath(".//img[@width='38.5']")).isEmpty(); // Choice etiketi
+
+                // Eğer etiketlerden biri varsa geçerli
+                if (!(hasPromoLabel || hasWelcomeOfferLabel || hasChoiceLabel)) {
+                    allProductsHaveLabel = false;
+                    break;
+                }
+            }
+
+            // Sonuçları raporla
+            if (allProductsHaveLabel) {
+                System.out.println("Test PASSED: Tüm ürünlerde en az bir promosyon etiketi mevcut.");
+            } else {
+                System.err.println("Test FAILED: Bazı ürünlerde promosyon etiketi yok.");
+                takeScreenshot("Missing_Promo_Labels");
+            }
+        } else if (OS.isAndroid()) {
+            // Android platformu için etiket kontrolü
+            // Android'e özgü adımlar
+        }
+    }
+    // When: Kullanıcı "Galerie" ya da "list" seçeneğine tıklıyor
+    @When("Utilisateur clique sur l'option {string}")
+    public void utilisateur_clique_sur_l_option(String mode) {
+
+        // Modun belirlenmesi
+        if (mode.equalsIgnoreCase("Galerie")) {
+             categories.galerieButton.click();// 'Galerie' butonuna click
+             basePage.wait(10);
+        } else if (mode.equalsIgnoreCase("List")) {
+             categories.listeButton.click(); // 'Liste' butonuna click
+             basePage.wait(10);
+        }
+
+    }
+
+    // Then: Ürünler "Galerie" veya "Liste" modunda görüntülenmelidir
+    @Then("Les produits doivent être affichés en mode {string}")
+    public void les_produits_doivent_etre_affiches_en_mode(String mode) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+        // Bekleme süresi
+        if (mode.equalsIgnoreCase("Galerie")) {
+            wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='list--gallery--C2f2tvm search-item-card-wrapper-gallery']"))); // Galeri modunun locatörü
+            System.out.println("Les produits sont affichés en mode Galerie.");
+        } else if (mode.equalsIgnoreCase("List")) {
+            wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='list--list--3wn4cH5 search-item-card-wrapper-list']"))); // Liste modunun locatörü
+            System.out.println("Les produits sont affichés en mode List.");
+        }
+    }
 
 }
 

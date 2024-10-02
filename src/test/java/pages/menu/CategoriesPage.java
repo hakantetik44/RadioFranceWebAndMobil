@@ -53,4 +53,19 @@ public class CategoriesPage {
 
     @FindBy(xpath = "//*[@id='canvas']")
     public WebElement chercheImageFermee;
+
+    @FindBy(xpath = "//span[text()='Commandes']")
+    public  WebElement commandesButton;
+
+    @FindBy(xpath = "//*[text()='Promo']")
+    public WebElement promoCheckbox;
+
+    @FindBy(xpath = "(//span[text()='Promo'])[2]")
+    public WebElement promoReductions;
+
+    @FindBy(xpath = "//span[text()='Galerie']")
+    public WebElement galerieButton;
+
+    @FindBy(xpath = "//span[text()='Liste']")
+    public WebElement listeButton;
 }
