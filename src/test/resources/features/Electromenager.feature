@@ -33,16 +33,35 @@ Feature: Categorie d'Électroménager
     Then Les produits doivent être affichés dans la fourchette de prix spécifiée
     And Utilisateur vérifie que tous les produits affichés ont un prix compris entre "50" et "100"
 
-
   Scenario: Affichage d'un avertissement lorsque des caractères non numériques sont saisis dans les champs min et max
     Given Utilisateur est sur la page d'une sous-catégorie sélectionnée
     When Utilisateur saisis un prix minimum de "abc" et un prix maximum de "xyz"
     And  valide les filtres de prix
     Then Un message d'avertissement devrait être affiché
 
-  @web
   Scenario: Sélectionner un pays et vérifier l'affichage du produit
     Given Utilisateur est sur la page d'une sous-catégorie sélectionnée
     When Utilisateur sélectionne le pays "France"
     And Utilisateur clique sur un produit aléatoire
     Then La page du produit doit afficher expédié depuis "France"
+
+  Scenario: Vérifier l'ordre des produits selon les ventes
+    Given Utilisateur est sur la page d'une sous-catégorie sélectionnée
+    When Utilisateur clique sur la Commandes
+    Then Les produits devrait afficher de plus vendus à moins vendus
+
+  Scenario: Utilisateur sélectionne une promotion et voit les produits en promotion
+    Given Utilisateur est sur la page d'une sous-catégorie sélectionnée
+    When Utilisateur clique sur la Promo
+    Then Réductions Promo affiche
+    And Chaque produit devrait afficher au moins une étiquette 'Promo' ou 'Offre de bienvenue' ou 'Choice'
+
+  Scenario: L'utilisateur peut visualiser les produits en mode galerie
+    Given Utilisateur est sur la page d'une sous-catégorie sélectionnée
+    When Utilisateur clique sur l'option "Galerie"
+    Then Les produits doivent être affichés en mode "Galerie"
+
+  Scenario: L'utilisateur peut visualiser les produits en mode liste
+    Given Utilisateur est sur la page d'une sous-catégorie sélectionnée
+    When Utilisateur clique sur l'option "List"
+    Then Les produits doivent être affichés en mode "List"
