@@ -1,5 +1,17 @@
 package pages;
 
+import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.ios.IOSDriver;
+import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
+import utils.ConfigReader;
 import com.google.common.collect.ImmutableMap;
 import io.appium.java_client.PerformsTouchActions;
 import io.appium.java_client.TouchAction;
@@ -84,55 +96,56 @@ public class BasePage {
         int end_x = (int) (dimension.width * 0.5);
         int end_y = (int) (dimension.height * 0.5);
 
-        TouchAction touch = new TouchAction((PerformsTouchActions) getCurrentDriver());
-        touch.press(point(start_x, start_y)).waitAction(waitOptions(Duration.ofSeconds(1))).moveTo(point(end_x, end_y)).release().perform();
-        Thread.sleep(3000);
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.time.Duration;
+
+class DriverManager {
+
+    private static ThreadLocal<WebDriver> webDriver = new ThreadLocal<>();
+    private static ThreadLocal<AppiumDriver> mobileDriver = new ThreadLocal<>();
+
+    // WebDriver'ı başlatan ve döndüren metot
+    public static WebDriver getWebDriver() {
+        if (webDriver.get() == null) {
+            String browser = ConfigReader.getProperty("browser");  // config'den tarayıcı bilgisi alınıyor
+            webDriver.set(getWebDriver(browser));  // Tarayıcıya göre driver'ı başlatıyor
+        }
+        return webDriver.get();
     }
 
-    public void scrollFromUpToButtom() throws InterruptedException, MalformedURLException {
+    // WebDriver'ı tarayıcıya göre başlatan ve döndüren metot (Chrome, Firefox, Edge eklemeleriyle)
+    public static WebDriver getWebDriver(String browser) {
+        WebDriver driver;
+        switch (browser.toLowerCase()) {
+            case "chrome":
+                // Chrome için özel ayarlar ve opsiyonlar ekleniyor
+                ChromeOptions chromeOptions = new ChromeOptions();
+                chromeOptions.addArguments("--disable-search-engine-choice-screen");
+                chromeOptions.addArguments("--no-first-run"); // Tarayıcı ilk kurulum adımlarını geç
+                chromeOptions.addArguments("--start-maximized"); // Tarayıcıyı maksimum boyutta aç
+                chromeOptions.addArguments("--disable-default-apps"); // Varsayılan uygulamaları devre dışı bırak
+                chromeOptions.addArguments("--no-default-browser-check"); // Varsayılan tarayıcı kontrolünü geç
+                driver = new ChromeDriver(chromeOptions); // ChromeDriver'ı opsiyonlarla başlat
+                break;
 
-        Dimension dimension = getCurrentDriver().manage().window().getSize();
-        int start_x = (int) (dimension.width * 0.2);
-        int start_y = (int) (dimension.height * 0.2);
-        int end_x = (int) (dimension.width * 0.2);
-        int end_y = (int) (dimension.height * 0.5);
+            case "firefox":
+                // Firefox için özel ayarlar ekleniyor
+                FirefoxOptions firefoxOptions = new FirefoxOptions();
+                firefoxOptions.addArguments("--start-maximized");
+                driver = new FirefoxDriver(firefoxOptions); // Firefox tarayıcı başlatılıyor
+                break;
 
-        TouchAction touch = new TouchAction((PerformsTouchActions) getCurrentDriver());
-        touch.press(point(start_x, start_y)).waitAction(waitOptions(Duration.ofSeconds(1))).moveTo(point(end_x, end_y)).release().perform();
-        Thread.sleep(3000);
-    }
+            case "edge":
+                // Edge için özel ayarlar ekleniyor
+                EdgeOptions edgeOptions = new EdgeOptions();
+                edgeOptions.addArguments("--start-maximized");
+                driver = new EdgeDriver(edgeOptions); // Edge tarayıcı başlatılıyor
+                break;
 
-    public void scrollDown() throws InterruptedException, MalformedURLException {
-
-        Dimension dimension = getCurrentDriver().manage().window().getSize();
-        int start_x = (int) (dimension.width * 0.5);
-        int start_y = (int) (dimension.height * 0.5);
-
-        int end_x = (int) (dimension.width * 0.2);
-        int end_y = (int) (dimension.height * 0.2);
-
-        TouchAction touch = new TouchAction((PerformsTouchActions) getCurrentDriver());
-        touch.press(point(start_x, start_y)).waitAction(waitOptions(Duration.ofSeconds(1))).moveTo(point(end_x, end_y)).release().perform();
-        Thread.sleep(3000);
-    }
-
-
-    public void performSwipe(int x, int y) throws MalformedURLException, InterruptedException {
-        Dimension dimension = getCurrentDriver().manage().window().getSize();
-
-        int start_x = (int) (dimension.width * 0.5);
-        int start_y = x;
-
-        int end_x = (int) (dimension.width * 0.2);
-        int end_y = y;
-
-        TouchAction touch = new TouchAction((PerformsTouchActions) getCurrentDriver());
-        touch.press(point(start_x, start_y))
-                .waitAction(waitOptions(Duration.ofSeconds(1)))
-                .moveTo(point(end_x, end_y))
-                .release()
-                .perform();
-    }
+            default:
+                throw new IllegalArgumentException("Unsupported browser: " + browser);
 
     public static void dragAndDrop(double endX, double endY) throws MalformedURLException, InterruptedException {
         ((JavascriptExecutor) getCurrentDriver()).executeScript(
@@ -179,118 +192,47 @@ public class BasePage {
         } catch (Exception e) {
             e.printStackTrace();
             return false;
+
         }
+        driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        // Başlatılan tarayıcı ile URL'yi açıyoruz
+        driver.get(ConfigReader.getProperty("webUrl"));
+        return driver;
     }
 
+    // Mobil driver'ı başlatan ve döndüren metot
+    public static AppiumDriver getMobileDriver() throws MalformedURLException {
+        if (mobileDriver.get() == null) {
+            String platform = ConfigReader.getProperty("mobile.platform");  // config'den platform bilgisi alınıyor
+            String appiumUrl = ConfigReader.getProperty("appium.url");      // Appium server URL'si
 
-    public boolean cliquerLogoOverKizConnectSeptFois(Actions actions, WebElement logoOverKizConnect) {
-        try {
-            for (int i = 0; i < 7; i++) {
-                actions.click(logoOverKizConnect);
-            }
-            actions.perform();
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public static String getRandomName() {
-        final String ALLOWED_CHARACTERS = "abcdefghijklmnopqrstuvwxyz";
-        final String VOYELS = "aeiouy";
-
-        Random random = new Random();
-        StringBuilder nameBuilder = new StringBuilder();
-        int nameLength = random.nextInt(6) + 5;
-        nameBuilder.append(VOYELS.charAt(random.nextInt(VOYELS.length())));
-
-        for (int i = 1; i < nameLength; i++) {
-            nameBuilder.append(ALLOWED_CHARACTERS.charAt(random.nextInt(ALLOWED_CHARACTERS.length())));
-        }
-        return nameBuilder.toString();
-    }
-
-    public static void main(String[] args) {
-        for (int i = 0; i < 5; i++) {
-            System.out.println(getRandomName());}}
-
-    public static String getRandomPhoneNumber() {
-        Random random = new Random();
-        StringBuilder phoneNumberBuilder = new StringBuilder();
-        phoneNumberBuilder.append("0").append(random.nextInt(2) + 6);
-        for (int i = 0; i < 8; i++) {
-            phoneNumberBuilder.append(random.nextInt(10));
-        }
-        return phoneNumberBuilder.toString();}
-
-
-
-    public static String getRandomAddress() {
-        Random random = new Random();
-        StringBuilder addressBuilder = new StringBuilder();
-        addressBuilder.append(random.nextInt(99) + 1).append(" Rue des Frères Montgolfier");
-        return addressBuilder.toString();
-    }
-
-    public static String getRandomPostalCode() {
-        Random random = new Random();
-        StringBuilder postalCodeBuilder = new StringBuilder();
-        postalCodeBuilder.append(String.format("%02d", random.nextInt(99) + 1)).append(String.format("%03d", random.nextInt(1000)));
-        while (postalCodeBuilder.length() < 5) {
-        postalCodeBuilder.append("0");}
-    return postalCodeBuilder.toString();}
-
-    public boolean isElementClickable(WebElement element) {
-        try {
-            if (element.isEnabled() && element.isDisplayed()) {
-                return true;}
-            else {
-                return false;}
-        } catch (Exception e) {
-            return false;}}
-
-    public void cliquerSurLocatorEtPoint(By locator, int y) {
-        try {
-            WebElement element = getCurrentDriver().findElement(locator);
-
-            int x = element.getLocation().getX();
-
-
-            TouchAction touchAction = new TouchAction((PerformsTouchActions) getCurrentDriver());
-            touchAction.tap(PointOption.point(x, y))
-                    .waitAction(WaitOptions.waitOptions(Duration.ofMillis(500)))
-                    .perform();
-        } catch (Exception e) {
-            System.out.println("L'erruer: " + e.getMessage());
-        }
-    }
-
-    public void addAppOperationManager(WebDriver driver) {
-        List<String> appNames = new ArrayList<>(Arrays.asList("wisniowski", "hexaom", "flexomv3", "kizconnect"));
-
-        for (String variable : appNames) {
-            for (String appName : appNames) {
-                setImplicitlyWait(1);
-                String locator = "com.overkiz." + appName + ":id/" + variable;
-                WebElement element = findElementIfExists(locator);
-                if (element != null) {
-                    element.click();
-                    resetImplicitlyWait();
-                    return;
-                }
+            if ("android".equalsIgnoreCase(platform)) {
+                mobileDriver.set(new AndroidDriver(new URL(appiumUrl), (Capabilities) null));
+            } else if ("ios".equalsIgnoreCase(platform)) {
+                mobileDriver.set(new IOSDriver(new URL(appiumUrl), null));
+            } else {
+                throw new RuntimeException("Unsupported mobile platform: " + platform);
             }
         }
-        resetImplicitlyWait();
+        return mobileDriver.get();
     }
 
-    public WebElement findElementIfExists(String locator) {
-        try {
-            return getCurrentDriver().findElement(By.id(locator));
-        } catch (Exception e) {
-            return null;
+    // Tüm driver'ları kapatan metot
+    public static void quitDrivers() {
+        // WebDriver'ı kapatma
+        if (webDriver.get() != null) {
+            webDriver.get().quit();
+            webDriver.remove();
+        }
+        // Mobil driver'ı kapatma
+        if (mobileDriver.get() != null) {
+            mobileDriver.get().quit();
+            mobileDriver.remove();
         }
     }
+
+}
 
     private void setImplicitlyWait(int seconds) {
         getCurrentDriver().manage().timeouts().implicitlyWait(seconds, TimeUnit.SECONDS);
