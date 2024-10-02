@@ -1,6 +1,12 @@
 package pages.menu;
 import org.openqa.selenium.By;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+
 import org.openqa.selenium.support.PageFactory;
+import utils.Driver;
 import utils.OS;
 import static utils.Driver.getCurrentDriver;
 
@@ -45,6 +51,23 @@ public class AcceuilPage {
         getCurrentDriver().findElement(mocassins).click();
     }
 
+
+
+    public void clickCustomerServiceCallButton() {
+        getCurrentDriver().findElement(getCustomerServiceCallButton()).click();
+    }
+
+    @FindBy(xpath = "//*[text()='Cookies accepteren']")
+         public WebElement cookies;
+
+    @FindBy(xpath = "//*[text()='Toestaan']")
+    public WebElement allow;
+
+    @FindBy(xpath="//div[text()='Alle Rubrieken']")
+       public WebElement alleRubrieken;
+
+    @FindBy(xpath="//*[text()='Dameskleding']")
+    public WebElement womenClothes;
 
 
 }
