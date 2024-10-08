@@ -60,7 +60,7 @@ Feature: Categorie d'Électroménager
     Given Utilisateur est sur la page d'une sous-catégorie sélectionnée
     When Utilisateur clique sur l'option "Galerie"
     Then Les produits doivent être affichés en mode "Galerie"
-
+@web
   Scenario: L'utilisateur peut visualiser les produits en mode liste
     Given Utilisateur est sur la page d'une sous-catégorie sélectionnée
     When Utilisateur clique sur l'option "List"
