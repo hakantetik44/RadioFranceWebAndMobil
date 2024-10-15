@@ -53,21 +53,6 @@ public class AcceuilPage {
 
 
 
-    public void clickCustomerServiceCallButton() {
-        getCurrentDriver().findElement(getCustomerServiceCallButton()).click();
-    }
-
-    @FindBy(xpath = "//*[text()='Cookies accepteren']")
-         public WebElement cookies;
-
-    @FindBy(xpath = "//*[text()='Toestaan']")
-    public WebElement allow;
-
-    @FindBy(xpath="//div[text()='Alle Rubrieken']")
-       public WebElement alleRubrieken;
-
-    @FindBy(xpath="//*[text()='Dameskleding']")
-    public WebElement womenClothes;
 
 
 }
