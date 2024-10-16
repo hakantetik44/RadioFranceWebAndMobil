@@ -169,10 +169,10 @@ public class BasePage {
         return dayOfWeek + dayNumber + " " + month;
     }
 
-    public boolean cliquerLogoOverKizConnectSixFois(Actions actions, WebElement logoOverKizConnect) {
+    public boolean cliquerLogoSixFois(Actions actions, WebElement logo) {
         try {
             for (int i = 0; i < 6; i++) {
-                actions.click(logoOverKizConnect);
+                actions.click(logo);
             }
             actions.perform();
             return true;
@@ -183,10 +183,10 @@ public class BasePage {
     }
 
 
-    public boolean cliquerLogoOverKizConnectSeptFois(Actions actions, WebElement logoOverKizConnect) {
+    public boolean cliquerLogoSeptFois(Actions actions, WebElement logo) {
         try {
             for (int i = 0; i < 7; i++) {
-                actions.click(logoOverKizConnect);
+                actions.click(logo);
             }
             actions.perform();
             return true;
@@ -267,12 +267,12 @@ public class BasePage {
     }
 
     public void addAppOperationManager(WebDriver driver) {
-        List<String> appNames = new ArrayList<>(Arrays.asList("wisniowski", "hexaom", "flexomv3", "kizconnect"));
+        List<String> appNames = new ArrayList<>(Arrays.asList("w", "h", "f", "k"));
 
         for (String variable : appNames) {
             for (String appName : appNames) {
                 setImplicitlyWait(1);
-                String locator = "com.overkiz." + appName + ":id/" + variable;
+                String locator = "com." + appName + ":id/" + variable;
                 WebElement element = findElementIfExists(locator);
                 if (element != null) {
                     element.click();

@@ -5,53 +5,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a7235207-9e20-4acb-8c49-5e517e534797" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/material_theme_project_new.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/radio-france.apk" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/material_theme_project_new.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/material_theme_project_new.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Jenkinsfile" beforeDir="false" afterPath="$PROJECT_DIR$/Jenkinsfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/configuration.properties" beforeDir="false" afterPath="$PROJECT_DIR$/configuration.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/pages/AppOperationManager.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/pages/BasePage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/pages/BasePage.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/pages/menu/AcceuilPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/pages/menu/AcceuilPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/pages/menu/CategoriesPage.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/runner/TestRunner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/runner/TestRunner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/stepdefinitions/Hooks.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/stepdefinitions/Hooks.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/stepdefinitions/menu/AliExpressStepDefinitions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/stepdefinitions/menu/AliExpressStepDefinitions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/utils/Driver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/utils/Driver.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/resources/features/Accessoire.feature" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/resources/features/Accessoire.feature" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/resources/features/Aliexpress.feature" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/resources/features/Electromenager.feature" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/resources/features/HomePageForBelgiumUser.feature" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/cucumber-pretty-reports/cucumber-html-reports/css/bootstrap.min.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/cucumber-pretty-reports/cucumber-html-reports/css/cucumber.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/cucumber-pretty-reports/cucumber-html-reports/css/font-awesome.min.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/cucumber-pretty-reports/cucumber-html-reports/embeddings/embedding_-724564067.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/cucumber-pretty-reports/cucumber-html-reports/embeddings/embedding_1165131736.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/cucumber-pretty-reports/cucumber-html-reports/embeddings/embedding_1228103859.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/cucumber-pretty-reports/cucumber-html-reports/embeddings/embedding_2039982476.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/cucumber-pretty-reports/cucumber-html-reports/embeddings/embedding_234276195.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/cucumber-pretty-reports/cucumber-html-reports/fonts/FontAwesome.otf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/cucumber-pretty-reports/cucumber-html-reports/fonts/fontawesome-webfont.eot" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/cucumber-pretty-reports/cucumber-html-reports/fonts/fontawesome-webfont.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/cucumber-pretty-reports/cucumber-html-reports/fonts/fontawesome-webfont.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/cucumber-pretty-reports/cucumber-html-reports/fonts/fontawesome-webfont.woff" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/cucumber-pretty-reports/cucumber-html-reports/fonts/fontawesome-webfont.woff2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/cucumber-pretty-reports/cucumber-html-reports/fonts/glyphicons-halflings-regular.eot" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/cucumber-pretty-reports/cucumber-html-reports/fonts/glyphicons-halflings-regular.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/cucumber-pretty-reports/cucumber-html-reports/fonts/glyphicons-halflings-regular.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/cucumber-pretty-reports/cucumber-html-reports/fonts/glyphicons-halflings-regular.woff" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/cucumber-pretty-reports/cucumber-html-reports/fonts/glyphicons-halflings-regular.woff2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/cucumber-pretty-reports/cucumber-html-reports/images/favicon.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/cucumber-pretty-reports/cucumber-html-reports/js/Chart.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/cucumber-pretty-reports/cucumber-html-reports/js/bootstrap.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/cucumber-pretty-reports/cucumber-html-reports/js/jquery.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/cucumber-pretty-reports/cucumber-html-reports/js/jquery.tablesorter.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/cucumber-pretty-reports/cucumber-html-reports/js/moment.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/cucumber-pretty-reports/cucumber-html-reports/overview-failures.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/cucumber-pretty-reports/cucumber-html-reports/overview-features.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/cucumber-pretty-reports/cucumber-html-reports/overview-steps.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/cucumber-pretty-reports/cucumber-html-reports/overview-tags.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/cucumber-pretty-reports/cucumber-html-reports/report-feature_1878677101.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/cucumber-pretty-reports/cucumber-html-reports/report-tag_2209160401.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/cucumber-pretty-reports/cucumber-html-reports/report-tag_2210145489.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/cucumber.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/features/Aliexpress.feature" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/features/Accessoire.feature" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/test-classes/pages/AppOperationManager.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/pages/DriverManager.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/pages/BasePage$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/pages/BasePage.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/test-classes/pages/menu/AcceuilPage.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/pages/menu/CategoriesPage.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/test-classes/runner/TestRunner.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/test-classes/stepdefinitions/Hooks.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/test-classes/stepdefinitions/menu/AliExpressStepDefinitions.class" beforeDir="false" />
@@ -101,26 +77,32 @@
     "Maven.AliexpressAndroidWebProjesi [clean].executor": "Run",
     "Maven.AliexpressAndroidWebProjesi [compile].executor": "Run",
     "Maven.AliexpressAndroidWebProjesi [install].executor": "Run",
+    "Maven.AliexpressAndroidWebProjesi [test].executor": "Run",
     "Maven.AliexpressAndroidWebProjesi [validate].executor": "Run",
     "Maven.AliexpressAndroidWebProjesi [verify].executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "hakan",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/hakan/IdeaProjects/AliExpressWebAndMobil/apps",
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.0",
+    "project.structure.side.proportion": "0.4",
     "settings.editor.selected.configurable": "preferences.lookFeel"
   }
 }]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/apps" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/apps" />
       <recent name="C:\Users\maruf\IdeaProjects\AliExpressWebAndMobil\src\apps" />
     </key>
   </component>
-  <component name="RunManager" selected="Cucumber Java.Feature: Accessoire">
+  <component name="RunManager" selected="JUnit.TestRunner (1)">
     <configuration name="Feature: Accessoire" type="CucumberJavaRunConfigurationType" factoryName="Cucumber java" temporary="true" nameIsGenerated="true">
       <option name="CUCUMBER_CORE_VERSION" value="5" />
       <option name="FILE_PATH" value="$PROJECT_DIR$/src/test/resources/features/Accessoire.feature" />
@@ -222,11 +204,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Cucumber Java.Feature: Accessoire" />
-        <item itemvalue="Cucumber Java.Feature: Aliexpress (1)" />
         <item itemvalue="JUnit.TestRunner (1)" />
-        <item itemvalue="Cucumber Java.Feature: Android" />
         <item itemvalue="JUnit.TestRunner" />
+        <item itemvalue="Cucumber Java.Feature: Android" />
+        <item itemvalue="Cucumber Java.Feature: Aliexpress (1)" />
+        <item itemvalue="Cucumber Java.Feature: Accessoire" />
       </list>
     </recent_temporary>
   </component>

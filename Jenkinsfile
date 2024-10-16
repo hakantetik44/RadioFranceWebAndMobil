@@ -17,7 +17,7 @@ pipeline {
             steps {
                 script {
                     echo 'Cloning repository...'
-                    git branch: 'main', credentialsId: '8578b7c2-17bc-4a05-bfdf-cefe81539245', url: 'https://gitlab.com/somfyconnected/qa/qa-somfy/e2e_overkiz.git'
+                    git branch: 'main', credentialsId: '8578b7c2-17bc-4a05-bfdf-cefe81539245', url: ''
                 }
             }
         }

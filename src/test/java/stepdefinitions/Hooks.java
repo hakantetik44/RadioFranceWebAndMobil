@@ -21,8 +21,8 @@ import utils.Driver;
 import utils.OS;
 
 public class Hooks {
-    public static final String APK_NAME = "aliexpress.apk";
-    public static final String WEB_URL = "https://www.aliexpress.com";
+    public static final String APK_NAME = "radio-france.apk";
+    public static final String WEB_URL = "https://www.radiofrance.fr/franceculture";
 
     protected WebDriverWait wait;
 

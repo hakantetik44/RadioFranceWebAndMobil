@@ -10,6 +10,7 @@ import org.openqa.selenium.edge.EdgeDriver;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+
 import stepdefinitions.Hooks;
 
 public class Driver {
@@ -21,16 +22,20 @@ public class Driver {
 
     public static BaseOptions getAndroidApps() {
         BaseOptions options = new BaseOptions()
-                .amend("appium:platformVersion", "10.0")
-                .amend("appium:deviceName", "Samsung")
-                .amend("appium:automationName", "UiAutomator2")
-                .amend("appium:noReset", true)
-                .amend("appium:wdaLocalPort", "7100")
                 .amend("appium:platformName", "Android")
-                .amend("appium:app", "/Users/hakan/IdeaProjects/e2e_overkiz/src/test/resources/Apps/" + Hooks.APK_NAME)
-                .amend("appium:connectHardwareKeyboard", false)
-                .amend("appium:appWaitPackage", Hooks.getAppPackage())
-                .amend("appium:newCommandTimeout", 3600);
+                .amend("appium:platformVersion", "11.0")
+                .amend("appium:deviceName", "emulator-5554")
+                .amend("appium:automationName", "UiAutomator2")
+                //.amend("appium:app","/Users/hakan/IdeaProjects/AliExpressWebAndMobil/apps/radio-france.apk")
+                .amend("appium:appPackage", "com.radiofrance.radio.radiofrance.android")
+                .amend("appium:appActivity", "com.radiofrance.radio.radiofrance.android.screen.splash.SplashActivity")
+                .amend("appium:noReset", true)
+                .amend("appium:autoGrantPermissions", true)
+                .amend("appium:newCommandTimeout", 3600)
+                .amend("appium:appWaitDuration", 20000)
+                .amend("appium:autoAcceptAlerts", true)
+                .amend("appium:dontStopAppOnReset", true);
+
         return options;
     }
 

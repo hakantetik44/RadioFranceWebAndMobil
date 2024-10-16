@@ -1,4 +1,5 @@
 package pages.menu;
+import io.appium.java_client.AppiumBy;
 import org.openqa.selenium.By;
 
 import org.openqa.selenium.WebDriver;
@@ -16,11 +17,11 @@ public class AcceuilPage {
         PageFactory.initElements(getCurrentDriver(), this);
     }
 
-    public void clickBtnNotification() {
-        By btnNotification = OS.isAndroid() ?
-                By.id("com.alibaba.aliexpresshd:id/nav_more") :  
-                By.xpath("//div[text()='Ne pas autoriser']");
-        getCurrentDriver().findElement(btnNotification).click();
+    public void clickBtnRechercher() {
+        By btnRecherche = OS.isAndroid() ?
+                AppiumBy.androidUIAutomator("new UiSelector().text(\"Recherche\")"):
+                By.xpath("//span[normalize-space()='Rechercher']");
+        getCurrentDriver().findElement(btnRecherche).click();
     }
 
     public void clickAccepterLesCookies() {

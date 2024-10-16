@@ -13,7 +13,7 @@ Ce projet est un projet de test mobile qui vise à développer des tests pour le
 * Outil de build: Maven
 * Cadre de test mobile: Appium
 * Langage BDD: Gherkin (Cucumber)
-* Kit de développement Java (JDK): 8
+* Kit de développement Java (JDK): 17
 * Page Object Modèle
 * Outil de reporting: Masterthought
 
@@ -33,3 +33,4 @@ Ce projet est un projet de test mobile qui vise à développer des tests pour le
 
 **POM.XML (AliexpressAndroidWebProjesi)**
 Ce fichier POM (Project Object Model) est utilisé avec Apache Maven pour gérer les dépendances et la configuration du projet. Il définit le groupe d'artefacts, l'identifiant d'artefact et la version du projet. De plus, il spécifie les versions des dépendances telles que Selenium, Cucumber et Appium, nécessaires pour l'exécution des tests. Les plugins Maven sont également configurés ici pour l'exécution des tests et la génération de rapports.# e2e_AkAk-e
+# RadioFranceWebAndMobil
